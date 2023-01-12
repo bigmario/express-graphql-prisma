@@ -1,0 +1,51 @@
+type User {
+  id: ID!
+  name: String!
+  lastName: String!
+  session: Session!
+  role: Role!
+}
+
+type Session {
+  id: ID!
+  email: EmailAddress!
+  password: String!
+  userId: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+type Role {
+  id: ID!
+  roleName: String
+  description: String
+  userId: ID
+}
+
+input CreateUserDto {
+  name: String!
+  lastName: String!
+  email: EmailAddress!
+  password: String!
+  roleName: String!
+}
+
+input UpdateUserDto {
+  id: ID!
+  name: String
+  lastName: String
+  email: EmailAddress
+  password: String
+}
+
+type Query {
+    allUsers: [User!]!
+    user(id: ID!): User
+}
+
+type Mutation {
+  addUser(dto: CreateUserDto): User!
+  # updateUser(id:ID!, dto: UpdateUserDto): User!
+  # deleteUser(id: ID!): ID!
+}
