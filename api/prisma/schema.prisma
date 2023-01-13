@@ -17,8 +17,9 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
+  role      Role      @relation(fields: [roleId], references: [id])
+  roleId    Int
   session   Session?
-  role      Role?
 }
 
 model Session {
@@ -28,14 +29,13 @@ model Session {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    Int?       @unique
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    Int?      @unique
 }
 
 model Role {
   id          Int     @id @default(autoincrement())
-  roleName    String? @unique
+  name        String? @unique
   description String?
-  user        User?    @relation(fields: [userId], references: [id])
-  userId      Int?     @unique
+  user        User[]
 }
