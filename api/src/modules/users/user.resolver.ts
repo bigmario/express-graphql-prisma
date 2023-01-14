@@ -1,6 +1,6 @@
 import { notFound, internal, Boom } from '@hapi/boom'
 
-import { Prisma, PrismaClient, Role, Session, User } from '@prisma/client';
+import { Prisma, PrismaClient, User } from '@prisma/client';
 
 
 type ResolverContext = {
