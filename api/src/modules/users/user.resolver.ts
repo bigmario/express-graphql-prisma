@@ -1,6 +1,6 @@
 import { notFound, internal, Boom } from '@hapi/boom'
 
-import type { Prisma, PrismaClient, Role, Session, User } from '@prisma/client';
+import { Prisma, PrismaClient, Role, Session, User } from '@prisma/client';
 
 
 type ResolverContext = {
@@ -14,8 +14,11 @@ export async function allUsers(
 ): Promise<User[]> {
   const users = await context.prisma.user.findMany({
     include: {
-      role: true,
-      session: true
+      session: {
+        include: {
+          role: true
+        }
+      }
     }
   });
   return users
@@ -23,74 +26,144 @@ export async function allUsers(
 
 export async function user(
   parent: unknown,
-  {id}: {id: string},
+  { id }: { id: string | number },
   context: ResolverContext
 ): Promise<User | Boom> {
   try {
     const user = await context.prisma.user.findFirst(
       {
         where: {
-          id: parseInt(id)
+          id: typeof id === 'string' ? parseInt(id) : id
         },
         include: {
-          session: true,
-          role: true
+          session: {
+            include: {
+              role: true
+            }
+          },
         }
       }
     );
     if (!user) {
       return notFound("User not found")
     } else {
-      return user as User
+      return user
     }
   } catch (error) {
     throw internal("Unknown Error")
   }
 };
 
-export async function addUser (
+export async function addUser(
   parent: unknown,
   {
     dto,
-  }:{
-    dto: Prisma.UserCreateInput & Prisma.SessionCreateInput & Prisma.RoleCreateInput & {roleId:string}
+  }: {
+    dto:
+    Pick<Prisma.UserCreateInput, "name" | "lastName"> &
+    Pick<Prisma.SessionCreateInput, "email" | "password"> &
+    { roleId: string }
   },
   context: ResolverContext
-  ):Promise<User | Boom> {
-    try {
-      const newUser = await context.prisma.user.create({
-        data: {
-          name: dto.name,
-          lastName: dto.lastName,
-          session: {
-            create: {
-              email: dto.email,
-              password: dto.password
-            }
-          },
+): Promise<User | Boom> {
+  try {
+    const newUserData: Prisma.UserCreateArgs['data'] = {
+      name: dto.name,
+      lastName: dto.lastName,
+      session: {
+        create: {
+          email: dto.email,
+          password: dto.password,
           role: {
             connect: {
               id: parseInt(dto.roleId),
             }
           }
-        },
-        include: {
-          session: true,
-          role: true
         }
-      });
-
-      return newUser
-    } catch (error) {
-      throw internal("Unknown Error", error)
+      }
     }
+    const newUser = await context.prisma.user.create({
+      data: newUserData,
+      include: {
+        session: {
+          include: {
+            role: true
+          }
+        }
+      }
+    });
+
+    return newUser
+  } catch (error) {
+    throw internal("Unknown Error", error)
+  }
 
 };
 
-// export const updateUser = () => {
-//   return "UPDATE User"
-// };
+export async function updateUser(
+  parent: unknown,
+  {
+    id,
+    dto
+  }:
+    {
+      id: number | string,
+      dto:
+      Pick<Prisma.UserUpdateInput, "name" | "lastName"> &
+      Pick<Prisma.SessionUpdateInput, "email" | "password"> &
+      { roleId: string }
+    },
+  context: ResolverContext
+): Promise<User | Boom> {
+  try {
+    const updateUserData: Prisma.UserUpdateArgs["data"] = {
+      name: dto?.name,
+      lastName: dto?.lastName,
+      session: {
+        update: {
+          email: dto?.email,
+          password: dto?.password,
+          roleId: parseInt(dto?.roleId)
+        },
+      }
+    }
 
-// export const deleteUser = () => {
-//   return "DELETE User"
-// };
+    const updateUser = await context.prisma.user.update({
+      where: {
+        id: typeof id === 'string' ? parseInt(id) : id
+      },
+      data: updateUserData,
+      include: {
+        session: {
+          include: {
+            role: true
+          }
+        }
+      }
+    });
+    return updateUser
+  } catch (error) {
+    throw internal("Unknown Error", error)
+  }
+};
+
+export async function deleteUser(
+  parent: unknown,
+  { id }: { id: string | number },
+  context: ResolverContext
+): Promise<number> {
+  const userFound = await context.prisma.user.findFirstOrThrow(
+    {
+      where: {
+        id: typeof id === 'string' ? parseInt(id) : id
+      }
+    }
+  );
+  await context.prisma.user.delete({
+    where: {
+      id: typeof id === 'string' ? parseInt(id) : id
+    }
+  });
+
+  return userFound.id
+};

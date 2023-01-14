@@ -3,23 +3,26 @@ type User {
   name: String!
   lastName: String!
   session: Session!
-  role: Role!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
 }
 
 type Session {
   id: ID!
-  email: EmailAddress
+  email: EmailAddress!
   password: String!
-  createdAt: DateTime
+  role: Role!
+  createdAt: DateTime!
   updatedAt: DateTime
   deletedAt: DateTime
 }
 
 type Role {
   id: ID!
-  name: String
-  description: String
-  userId: ID
+  name: String!
+  description: String!
+  session: Session
 }
 
 input CreateUserDto {
@@ -31,11 +34,11 @@ input CreateUserDto {
 }
 
 input UpdateUserDto {
-  id: ID!
   name: String
   lastName: String
   email: EmailAddress
   password: String
+  roleId: ID
 }
 
 type Query {
@@ -45,6 +48,6 @@ type Query {
 
 type Mutation {
   addUser(dto: CreateUserDto): User!
-  # updateUser(id:ID!, dto: UpdateUserDto): User!
-  # deleteUser(id: ID!): ID!
+  updateUser(id:ID!, dto: UpdateUserDto): User
+  deleteUser(id: ID!): ID
 }

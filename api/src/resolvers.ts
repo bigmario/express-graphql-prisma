@@ -1,7 +1,9 @@
 import {
   allUsers,
+  user,
   addUser,
-  user
+  updateUser,
+  deleteUser
 } from "./modules/users/user.resolver";
 
 export const resolvers = {
@@ -11,5 +13,7 @@ export const resolvers = {
   },
   Mutation: {
      addUser,
+     updateUser,
+     deleteUser
   }
 };
