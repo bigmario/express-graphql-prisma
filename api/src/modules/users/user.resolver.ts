@@ -9,7 +9,7 @@ import { UserService } from './users.service';
 
 const userService = new UserService();
 
-export async function getAllUsers(
+export async function allUsers(
   parent: unknown,
   args: FindOptions,
   context: ResolverContext
@@ -18,7 +18,7 @@ export async function getAllUsers(
   return users;
 };
 
-export async function getOneuser(
+export async function user(
   parent: unknown,
   args: FindOneType,
   context: ResolverContext
