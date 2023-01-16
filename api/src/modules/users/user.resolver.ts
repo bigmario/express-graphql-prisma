@@ -1,167 +1,55 @@
-import { notFound, internal, Boom } from '@hapi/boom'
+import type { Boom } from '@hapi/boom'
 
-import { Prisma, PrismaClient, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUSerDto } from './dto/updateUser.dto';
 
-import {buildFilters} from '../../libs/filterBuilders.lib'
+import { FindOneType, FindOptions, ResolverContext } from './types/user.types';
+import { UserService } from './users.service';
 
-
-type ResolverContext = {
-  prisma: PrismaClient
-}
+const userService = new UserService();
 
 export async function getAllUsers(
   parent: unknown,
-  args: {skip?: number, take?:number, search?: string},
+  args: FindOptions,
   context: ResolverContext
-): Promise<User[]> {
-  const users = await context.prisma.user.findMany({
-    where: {
-      ...(args?.search && {
-        OR: buildFilters(args.search, [
-          'name', 'lastName'
-        ]),
-      }),
-    },
-    include: {
-      session: {
-        include: {
-          role: true
-        }
-      }
-    },
-    skip: args?.skip || 0,
-    take: args?.take || 100
-  });
-  return users
+): Promise<User[] | Boom> {
+  const users = await userService.findAll(parent, args, context);
+  return users;
 };
 
 export async function getOneuser(
   parent: unknown,
-  { id }: { id: string | number },
+  args: FindOneType,
   context: ResolverContext
 ): Promise<User | Boom> {
-  try {
-    const user = await context.prisma.user.findFirst(
-      {
-        where: {
-          id: typeof id === 'string' ? parseInt(id) : id
-        },
-        include: {
-          session: {
-            include: {
-              role: true
-            }
-          },
-        }
-      }
-    );
-    if (!user) {
-      return notFound("User not found")
-    } else {
-      return user
-    }
-  } catch (error) {
-    throw internal("Unknown Error")
-  }
+  const user = await userService.findOne(parent, args, context);
+  return user;
 };
 
 export async function addUser(
   parent: unknown,
-  { dto }: { dto: CreateUserDto },
+  args: CreateUserDto,
   context: ResolverContext
 ): Promise<User | Boom> {
-  try {
-    const newUserData: Prisma.UserCreateArgs['data'] = {
-      name: dto.name,
-      lastName: dto.lastName,
-      image: dto.image,
-      session: {
-        create: {
-          email: dto.email,
-          password: dto.password,
-          role: {
-            connect: {
-              id: parseInt(dto.roleId),
-            }
-          }
-        }
-      }
-    }
-    const newUser = await context.prisma.user.create({
-      data: newUserData,
-      include: {
-        session: {
-          include: {
-            role: true
-          }
-        }
-      }
-    });
-
-    return newUser
-  } catch (error) {
-    throw internal("Unknown Error", error)
-  }
-
+  const newUser = await userService.create(parent, args, context);
+  return newUser;
 };
 
 export async function updateUser(
   parent: unknown,
-  { id, dto }: { id: number | string, dto: UpdateUSerDto },
+  args: UpdateUSerDto,
   context: ResolverContext
 ): Promise<User | Boom> {
-  try {
-    const updateUserData: Prisma.UserUpdateArgs["data"] = {
-      name: dto?.name,
-      lastName: dto?.lastName,
-      image: dto?.image,
-      session: {
-        update: {
-          email: dto?.email,
-          password: dto?.password,
-          roleId: parseInt(dto?.roleId)
-        },
-      }
-    }
-
-    const updateUser = await context.prisma.user.update({
-      where: {
-        id: typeof id === 'string' ? parseInt(id) : id
-      },
-      data: updateUserData,
-      include: {
-        session: {
-          include: {
-            role: true
-          }
-        }
-      }
-    });
-    return updateUser
-  } catch (error) {
-    throw internal("Unknown Error", error)
-  }
+  const updateUser = await userService.update(parent, args, context);
+  return updateUser;
 };
 
 export async function deleteUser(
   parent: unknown,
-  { id }: { id: string | number },
+  args: FindOneType,
   context: ResolverContext
-): Promise<number> {
-  const userFound = await context.prisma.user.findFirstOrThrow(
-    {
-      where: {
-        id: typeof id === 'string' ? parseInt(id) : id
-      }
-    }
-  );
-  await context.prisma.user.delete({
-    where: {
-      id: typeof id === 'string' ? parseInt(id) : id
-    }
-  });
-
-  return userFound.id
+): Promise<number | Boom> {
+  const deleteUser = userService.delete(parent, args, context);
+  return deleteUser;
 };
