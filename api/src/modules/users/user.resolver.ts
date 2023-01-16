@@ -76,6 +76,7 @@ export async function addUser(
     const newUserData: Prisma.UserCreateArgs['data'] = {
       name: dto.name,
       lastName: dto.lastName,
+      image: dto.image,
       session: {
         create: {
           email: dto.email,
@@ -115,6 +116,7 @@ export async function updateUser(
     const updateUserData: Prisma.UserUpdateArgs["data"] = {
       name: dto?.name,
       lastName: dto?.lastName,
+      image: dto?.image,
       session: {
         update: {
           email: dto?.email,
