@@ -1,6 +1,6 @@
 import {
-  allUsers,
-  user,
+  getAllUsers,
+  getOneuser,
   addUser,
   updateUser,
   deleteUser
@@ -8,8 +8,8 @@ import {
 
 export const resolvers = {
   Query: {
-    allUsers,
-    user
+    allUsers: getAllUsers,
+    user: getOneuser
   },
   Mutation: {
      addUser,

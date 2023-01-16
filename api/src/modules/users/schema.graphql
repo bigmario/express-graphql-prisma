@@ -42,7 +42,7 @@ input UpdateUserDto {
 }
 
 type Query {
-    allUsers: [User!]!
+    allUsers(skip: Int, take: Int, search: String): [User!]!
     user(id: ID!): User
 }
 

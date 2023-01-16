@@ -1,30 +1,43 @@
 import { notFound, internal, Boom } from '@hapi/boom'
 
 import { Prisma, PrismaClient, User } from '@prisma/client';
+import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUSerDto } from './dto/updateUser.dto';
+
+import {buildFilters} from '../../libs/filterBuilders.lib'
 
 
 type ResolverContext = {
   prisma: PrismaClient
 }
 
-export async function allUsers(
+export async function getAllUsers(
   parent: unknown,
-  args: unknown,
+  args: {skip?: number, take?:number, search?: string},
   context: ResolverContext
 ): Promise<User[]> {
   const users = await context.prisma.user.findMany({
+    where: {
+      ...(args?.search && {
+        OR: buildFilters(args.search, [
+          'name', 'lastName'
+        ]),
+      }),
+    },
     include: {
       session: {
         include: {
           role: true
         }
       }
-    }
+    },
+    skip: args?.skip || 0,
+    take: args?.take || 100
   });
   return users
 };
 
-export async function user(
+export async function getOneuser(
   parent: unknown,
   { id }: { id: string | number },
   context: ResolverContext
@@ -56,14 +69,7 @@ export async function user(
 
 export async function addUser(
   parent: unknown,
-  {
-    dto,
-  }: {
-    dto:
-    Pick<Prisma.UserCreateInput, "name" | "lastName"> &
-    Pick<Prisma.SessionCreateInput, "email" | "password"> &
-    { roleId: string }
-  },
+  { dto }: { dto: CreateUserDto },
   context: ResolverContext
 ): Promise<User | Boom> {
   try {
@@ -102,17 +108,7 @@ export async function addUser(
 
 export async function updateUser(
   parent: unknown,
-  {
-    id,
-    dto
-  }:
-    {
-      id: number | string,
-      dto:
-      Pick<Prisma.UserUpdateInput, "name" | "lastName"> &
-      Pick<Prisma.SessionUpdateInput, "email" | "password"> &
-      { roleId: string }
-    },
+  { id, dto }: { id: number | string, dto: UpdateUSerDto },
   context: ResolverContext
 ): Promise<User | Boom> {
   try {
