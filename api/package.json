@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon index.ts"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^6.6.1",

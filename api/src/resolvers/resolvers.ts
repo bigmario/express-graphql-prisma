@@ -4,7 +4,7 @@ import {
   addUser,
   updateUser,
   deleteUser
-} from "./modules/users/user.resolver";
+} from "../modules/users/user.resolver";
 
 export const resolvers = {
   Query: {

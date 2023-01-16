@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server';
-import { resolvers } from './resolvers'
+import { resolvers } from './resolvers/resolvers'
 import { loadFiles } from '@graphql-tools/load-files'
 import { PrismaClient } from '@prisma/client';
 import { typeDefs as scalarsTypeDefs, resolvers as scalarsResolvers } from 'graphql-scalars';
