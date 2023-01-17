@@ -5,7 +5,7 @@ import { createTransport } from 'nodemailer';
 
 import {config} from '../../core/config';
 import { UpdateUSerDto } from '../users/dto/updateUser.dto';
-import { ResolverContext } from '../users/types/user.types';
+import { ResolverContext } from '../../core/types/core.types';
 import { UserService } from '../users/users.service';
 import { ChangePasswordType, LoginType, MailType, RecoveryType } from './types/auth.types';
 const service = new UserService();
