@@ -48,7 +48,7 @@ export class AuthService {
     const payload = { sub: user.id };
     const token = sign(payload, config.jwtSecret as Secret, {expiresIn: '15min'});
     const link = `http://myfrontend.com/recovery?token=${token}`;
-    await service.update(parent, args, context);
+    await service.update(parent, {id: user.id, dto: {recoveryToken: token}}, context);
 
     const mail: MailType = {
       from: config.smtpEmail,
@@ -91,7 +91,7 @@ export class AuthService {
           }
         },
         context);
-      return { message: 'password changed' };
+      return 'Password changed';
     } catch (error) {
       throw unauthorized();
     }
@@ -109,6 +109,6 @@ export class AuthService {
     }
     const transporter = createTransport(mailOptions);
     await transporter.sendMail(infoMail);
-    return { message: 'mail sent' };
+    return 'Mail Succesfully Sent';
   }
 }
