@@ -3,7 +3,7 @@ import { LoginType } from 'api/src/modules/auth/types/auth.types';
 import { GraphQLLocalStrategy } from 'graphql-passport';
 
 import  { AuthService } from '../../../modules/auth/auth.service';
-import { ResolverContext } from '../../../modules/users/types/user.types';
+import { ResolverContext } from '../../../core/types/core.types';
 
 const service = new AuthService();
 const prisma = new PrismaClient()

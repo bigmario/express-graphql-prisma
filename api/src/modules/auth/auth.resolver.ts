@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { UpdateUSerDto } from '../users/dto/updateUser.dto';
-import { ResolverContext } from '../users/types/user.types';
+import { ResolverContext } from '../../core/types/core.types';
 import { AuthService } from './auth.service';
 import { ChangePasswordType, LoginType, RecoveryType } from './types/auth.types';
 
@@ -20,7 +20,7 @@ export async function login(
 export async function sendRecovery(
   parent: unknown,
   args: UpdateUSerDto,
-  context: any
+  context: ResolverContext
 ) {
   const response = await service.sendRecovery(parent, args, context);
   return response;
@@ -29,7 +29,7 @@ export async function sendRecovery(
 export async function changePassword(
   parent: unknown,
   args: ChangePasswordType,
-  context: any
+  context: ResolverContext
 ) {
   const { token, newPassword } = args;
   const response = await service.changePassword(parent, {token, newPassword}, context);
