@@ -5,7 +5,7 @@ export type LoginType = {
 
 export type RecoveryType = Pick<LoginType, "email">
 
-export type changePasswordType = {
+export type ChangePasswordType = {
   token: string,
   newPassword: string
 }

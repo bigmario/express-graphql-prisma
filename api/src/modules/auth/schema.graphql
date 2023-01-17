@@ -5,4 +5,6 @@ type AuthResponse {
 
 type Mutation {
   login(email: EmailAddress!, password: String!): AuthResponse
+  sendRecovery(email: EmailAddress!): String
+  changePassword(token: String!, newPassword: String!): String
 }

@@ -6,7 +6,7 @@ import {
   deleteUser
 } from "../modules/users/user.resolver";
 
-import { login } from "../modules/auth/auth.resolver";
+import { login, sendRecovery, changePassword } from "../modules/auth/auth.resolver";
 
 export const resolvers = {
   Query: {
@@ -17,6 +17,8 @@ export const resolvers = {
      addUser,
      updateUser,
      deleteUser,
-     login
+     login,
+     sendRecovery,
+     changePassword
   }
 };

@@ -2,14 +2,12 @@ import {unauthorized} from '@hapi/boom';
 import { hash, compare } from 'bcrypt';
 import { Secret, sign, verify } from 'jsonwebtoken';
 import { createTransport } from 'nodemailer';
-import SMTPConnection from 'nodemailer/lib/smtp-connection';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 import {config} from '../../core/config';
 import { UpdateUSerDto } from '../users/dto/updateUser.dto';
 import { ResolverContext } from '../users/types/user.types';
 import { UserService } from '../users/users.service';
-import { changePasswordType, LoginType, MailType, RecoveryType } from './types/auth.types';
+import { ChangePasswordType, LoginType, MailType, RecoveryType } from './types/auth.types';
 const service = new UserService();
 
 export class AuthService {
@@ -64,7 +62,7 @@ export class AuthService {
 
   async changePassword(
     parent: unknown,
-    args: changePasswordType,
+    args: ChangePasswordType,
     context: ResolverContext) {
     try {
       const payload = verify(args.token, config.jwtSecret as Secret);

@@ -5,7 +5,6 @@ import { loadFiles } from '@graphql-tools/load-files'
 import { buildContext } from 'graphql-passport';
 import { PrismaClient } from '@prisma/client';
 import type { Request, Response } from 'express';
-import type { ResolverContext } from './modules/users/types/user.types';
 import { typeDefs as scalarsTypeDefs, resolvers as scalarsResolvers } from 'graphql-scalars';
 
 export const serveGraphql = async (app: Express) => {
