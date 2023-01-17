@@ -11,15 +11,15 @@ const prisma = new PrismaClient()
 export const GQLLocalStrategy = new GraphQLLocalStrategy(
   async (email, password, done) => {
     try {
-      const parent = null
-      const args: LoginType = {
-        email: email as string,
-        password: password as string
-      }
-      const context: ResolverContext = {
-        prisma: prisma
-      }
-      const user = await service.getUser(parent, args, context);
+      const user = await service.getUser(
+        null,
+        {
+          email: email as string,
+          password: password as string
+        },
+        {
+          prisma: prisma
+        });
       done(null, user);
     } catch (error) {
       done(error, false);
