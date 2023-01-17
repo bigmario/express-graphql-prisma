@@ -3,8 +3,9 @@ import type { Boom } from '@hapi/boom'
 import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUSerDto } from './dto/updateUser.dto';
+import { ResolverContext } from '../../core/types/core.types';
 
-import { FindOneType, FindOptions, ResolverContext } from './types/user.types';
+import { FindOneType, FindOptions } from './types/user.types';
 import { UserService } from './users.service';
 
 const userService = new UserService();
