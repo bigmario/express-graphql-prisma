@@ -6,6 +6,8 @@ import {
   deleteUser
 } from "../modules/users/user.resolver";
 
+import { login } from "../modules/auth/auth.resolver";
+
 export const resolvers = {
   Query: {
     allUsers,
@@ -14,6 +16,7 @@ export const resolvers = {
   Mutation: {
      addUser,
      updateUser,
-     deleteUser
+     deleteUser,
+     login
   }
 };

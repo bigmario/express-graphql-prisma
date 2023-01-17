@@ -22,16 +22,17 @@ model User {
 }
 
 model Session {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  role      Role?     @relation(fields: [roleId], references: [id])
-  roleId    Int?
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int       @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime?
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String
+  recoveryToken String?
+  role          Role?     @relation(fields: [roleId], references: [id])
+  roleId        Int?
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int       @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  deletedAt     DateTime?
 }
 
 model Role {

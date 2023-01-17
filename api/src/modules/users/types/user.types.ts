@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client"
 
 export type ResolverContext = {
-  prisma: PrismaClient
+  prisma: PrismaClient,
 }
 
 export type FindOneType = {
-  id: string | number
+  id?: string | number,
+  email?: string
 }
 
 export type FindOptions = {

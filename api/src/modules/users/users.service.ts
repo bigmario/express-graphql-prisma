@@ -1,6 +1,6 @@
-import { notFound, internal } from '@hapi/boom'
-
-import { Prisma } from '@prisma/client';
+import { notFound, internal, Boom } from '@hapi/boom'
+import { hash } from 'bcrypt'
+import { Prisma, Session, User } from '@prisma/client';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUSerDto } from './dto/updateUser.dto';
 
@@ -37,7 +37,7 @@ export class UserService {
     }
   }
 
-  async findOne(parent: unknown, args: FindOneType, context: ResolverContext) {
+  async findOne(parent: unknown, args: FindOneType, context: ResolverContext): Promise<any> {
     try {
       const user = await context.prisma.user.findFirst(
         {
@@ -61,11 +61,11 @@ export class UserService {
     } catch (error) {
       throw internal("Unknown Error")
     }
-
   }
 
-  async create (parent: unknown, args: CreateUserDto, context: ResolverContext) {
+  async create (parent: unknown, args: CreateUserDto, context: ResolverContext): Promise<User> {
     try {
+      const hashpass = await hash(args.dto.password, 10);
       const newUserData: Prisma.UserCreateArgs['data'] = {
         name: args.dto.name,
         lastName: args.dto.lastName,
@@ -73,7 +73,7 @@ export class UserService {
         session: {
           create: {
             email: args.dto.email,
-            password: args.dto.password,
+            password: hashpass,
             role: {
               connect: {
                 id: parseInt(args.dto.roleId),
@@ -109,7 +109,8 @@ export class UserService {
           update: {
             email: args.dto?.email,
             password: args.dto?.password,
-            roleId: parseInt(args.dto?.roleId)
+            recoveryToken: args.dto?.recoveryToken,
+            ...(args.dto?.roleId && {roleId: parseInt(args.dto?.roleId)})
           },
         }
       }
@@ -153,5 +154,23 @@ export class UserService {
       throw internal("Unknown Error", error)
     }
 
+  }
+
+  async findByEmail(parent: unknown, args: FindOneType, context: ResolverContext) {
+    const user = await context.prisma.user.findFirstOrThrow({
+      where: {
+        session: {
+          email: args.email
+        }
+      },
+      include: {
+        session: {
+          include: {
+            role: true
+          }
+        }
+      }
+    })
+    return user
   }
 }
