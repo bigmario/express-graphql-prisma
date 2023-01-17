@@ -9,7 +9,7 @@ const service = new AuthService();
 const prisma = new PrismaClient()
 
 export const GQLLocalStrategy = new GraphQLLocalStrategy(
-  async (email: unknown, password: unknown, done) => {
+  async (email, password, done) => {
     try {
       const parent = null
       const args: LoginType = {
