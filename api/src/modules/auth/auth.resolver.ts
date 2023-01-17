@@ -1,8 +1,7 @@
-import { User } from '@prisma/client';
 import { UpdateUSerDto } from '../users/dto/updateUser.dto';
 import { ResolverContext } from '../../core/types/core.types';
 import { AuthService } from './auth.service';
-import { ChangePasswordType, LoginType, RecoveryType } from './types/auth.types';
+import { ChangePasswordType, LoginType } from './types/auth.types';
 
 const service = new AuthService();
 

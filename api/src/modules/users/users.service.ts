@@ -1,4 +1,4 @@
-import { notFound, internal, Boom } from '@hapi/boom'
+import { notFound, internal } from '@hapi/boom'
 import { hash } from 'bcrypt'
 import { Prisma, Session, User } from '@prisma/client';
 import { CreateUserDto } from './dto/createUser.dto';
