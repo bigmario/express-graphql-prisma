@@ -15,7 +15,7 @@ const service = new UserService();
 export class AuthService {
   constructor() {}
 
-  async getUser(parent: unknown, args: LoginType, context: any) {
+  async getUser(parent: unknown, args: LoginType, context: ResolverContext) {
     const user = await service.findByEmail(parent, args, context);
     if (!user) {
       throw unauthorized();
