@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+  graphql:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    env_file:
+     - api/.env
+    command: sh -c "cd api && npx prisma migrate dev && npx prisma db seed && yarn dev"
+    networks:
+      - main-network
+
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=users_crud
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - main-network
+    env_file:
+     - api/.env
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  main-network:
+
+
