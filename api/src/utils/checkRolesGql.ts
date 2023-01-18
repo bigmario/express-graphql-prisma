@@ -1,10 +1,7 @@
-const boom = require('@hapi/boom')
+import { unauthorized } from "@hapi/boom";
 
-function checkRolesGql(user, ...roles) {
+export function checkRolesGql(user: any, ...roles: any) {
   if (!roles.includes(user.role)) {
-    throw(boom.unauthorized('Not allowed'));
+    throw(unauthorized('Not allowed'));
   }
 }
-
-
-module.exports = checkRolesGql

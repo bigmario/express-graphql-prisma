@@ -31,7 +31,7 @@ export class AuthService {
   signToken(user: any) {
     const payload = {
       sub: user.id,
-      role: user.role
+      role: user.session.role.name
     }
     const access_token = sign(payload, config.jwtSecret as Secret);
     return {

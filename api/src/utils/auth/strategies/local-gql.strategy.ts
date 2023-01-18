@@ -16,7 +16,8 @@ export const GQLLocalStrategy = new GraphQLLocalStrategy(
           password: password as string
         },
         {
-          prisma: prisma
+          prisma: prisma,
+          build: undefined
         });
       done(null, user);
     } catch (error) {

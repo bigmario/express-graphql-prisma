@@ -2,13 +2,14 @@ import { UpdateUSerDto } from '../users/dto/updateUser.dto';
 import { ResolverContext } from '../../core/types/core.types';
 import { AuthService } from './auth.service';
 import { ChangePasswordType, LoginType } from './types/auth.types';
+import { Prisma } from '@prisma/client';
 
 const service = new AuthService();
 
 export async function login(
   parent: unknown,
   args: LoginType,
-  context: any
+  context: ResolverContext
 ): Promise<any> {
   const { email, password } = args;
   const { user } = await context.build.authenticate('graphql-local', {email , password});
