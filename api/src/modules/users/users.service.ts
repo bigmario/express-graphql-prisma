@@ -1,6 +1,6 @@
 import { notFound, internal } from '@hapi/boom'
 import { hash } from 'bcrypt'
-import { Prisma, Session, User } from '@prisma/client';
+import { Prisma, session, user } from '@prisma/client';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUSerDto } from './dto/updateUser.dto';
 
@@ -64,10 +64,10 @@ export class UserService {
     }
   }
 
-  async create (parent: unknown, args: CreateUserDto, context: ResolverContext): Promise<User> {
+  async create (parent: unknown, args: CreateUserDto, context: ResolverContext): Promise<user> {
     try {
       const hashpass = await hash(args.dto.password, 10);
-      const newUserData: Prisma.UserCreateArgs['data'] = {
+      const newUserData: Prisma.userCreateArgs['data'] = {
         name: args.dto.name,
         lastName: args.dto.lastName,
         image: args.dto.image,
@@ -102,7 +102,7 @@ export class UserService {
 
   async update(parent: unknown, args: UpdateUSerDto, context: ResolverContext) {
     try {
-      const updateUserData: Prisma.UserUpdateArgs["data"] = {
+      const updateUserData: Prisma.userUpdateArgs["data"] = {
         name: args.dto?.name,
         lastName: args.dto?.lastName,
         image: args.dto?.image,

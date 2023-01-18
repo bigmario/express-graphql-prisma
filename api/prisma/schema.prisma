@@ -6,11 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id        Int       @id @default(autoincrement())
   name      String
   lastName  String
@@ -18,26 +18,26 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
-  session   Session?
+  session   session?
 }
 
-model Session {
+model session {
   id            Int       @id @default(autoincrement())
   email         String    @unique
   password      String
   recoveryToken String?
-  role          Role?     @relation(fields: [roleId], references: [id])
+  role          role?     @relation(fields: [roleId], references: [id])
   roleId        Int?
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          user      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int       @unique
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
   deletedAt     DateTime?
 }
 
-model Role {
+model role {
   id          Int       @id @default(autoincrement())
   name        String?
   description String?
-  session     Session[]
+  session     session[]
 }

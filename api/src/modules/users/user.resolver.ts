@@ -1,6 +1,6 @@
 import type { Boom } from '@hapi/boom'
 
-import { User } from '@prisma/client';
+import { user } from '@prisma/client';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUSerDto } from './dto/updateUser.dto';
 import { ResolverContext } from '../../core/types/core.types';
@@ -15,7 +15,7 @@ export async function allUsers(
   parent: unknown,
   args: FindOptions,
   context: ResolverContext
-): Promise<User[] | Boom> {
+): Promise<user[] | Boom> {
   const users = await userService.findAll(parent, args, context);
   return users;
 };
@@ -24,7 +24,7 @@ export async function user(
   parent: unknown,
   args: FindOneType,
   context: ResolverContext
-): Promise<User | Boom> {
+): Promise<user | Boom> {
   const user = await userService.findOne(parent, args, context);
   return user;
 };
@@ -33,7 +33,7 @@ export async function addUser(
   parent: unknown,
   args: CreateUserDto,
   context: ResolverContext
-): Promise<User | Boom> {
+): Promise<user | Boom> {
   await jwtGuard(context)
   const newUser = await userService.create(parent, args, context);
   return newUser;
@@ -43,7 +43,7 @@ export async function updateUser(
   parent: unknown,
   args: UpdateUSerDto,
   context: ResolverContext
-): Promise<User | Boom> {
+): Promise<user | Boom> {
   await jwtGuard(context)
   const updateUser = await userService.update(parent, args, context);
   return updateUser;
