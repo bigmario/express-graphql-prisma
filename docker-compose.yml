@@ -9,11 +9,11 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - 3000:3000
+      - ${PORT}:3000
     depends_on:
       - postgres
     env_file:
-     - api/.env
+     - .env
     command: sh -c "cd api && npx prisma migrate dev && npx prisma db seed && yarn dev"
     networks:
       - main-network
@@ -21,17 +21,17 @@ services:
   postgres:
     image: postgres:13
     environment:
-      - POSTGRES_DB=users_crud
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 5432:5432
+      - ${DB_PORT}:5432
     volumes:
       - db:/var/lib/postgresql/data
     networks:
       - main-network
     env_file:
-     - api/.env
+     - .env
 
 volumes:
   db:

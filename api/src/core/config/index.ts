@@ -10,8 +10,8 @@ export const config = {
   dbUrl: process.env.DATABASE_URL,
   apiKey: process.env.API_KEY,
   jwtSecret: process.env.JWT_SECRET,
-  smtpEmail: process.env.SMTP_EMAIL || 'admin',
-  smtpPassword: process.env.SMTP_PASSWORD || 'admin',
+  smtpEmail: process.env.SMTP_EMAIL,
+  smtpPassword: process.env.SMTP_PASSWORD,
   smtpPort: process.env.SMTP_PORT || 3000,
   smtpHost: process.env.SMTP_HOST
 }

@@ -11,8 +11,8 @@ export type ChangePasswordType = {
 }
 
 export type MailType = {
-  from: string,
-  to: string,
-  subject: string,
-  html: string,
+  from: string | undefined,
+  to: string | undefined,
+  subject: string | undefined,
+  html: string | undefined,
 }
