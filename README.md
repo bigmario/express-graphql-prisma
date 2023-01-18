@@ -1,7 +1,7 @@
 # GraphQL User CRUD with PrismaORM
 
 ## Run on Local
-_edit ```.env.example``` file according to needs._
+_edit ```.env.example``` file according to needs. and rename it to ```.env```_
 ```bash
 #Installation
 $ yarn
