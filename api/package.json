@@ -8,7 +8,10 @@
     "seed": "ts-node ./prisma/seeder/seed.ts"
   },
   "scripts": {
-    "dev": "nodemon index.ts"
+    "build": "yarn clean && tsc --build",
+    "clean": "rm -rf ../build",
+    "start": "nodemon index.ts",
+    "dev": "yarn start"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^6.6.1",
