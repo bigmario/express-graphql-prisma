@@ -7,7 +7,7 @@ import { ResolverContext } from '../../core/types/core.types';
 
 import { FindOneType, FindOptions } from './types/user.types';
 import { UserService } from './users.service';
-import { jwtGuard } from 'api/src/utils/auth/guards/jwtGuard.guard';
+import { jwtGuard } from '../../utils/auth/guards/jwtGuard.guard';
 
 const userService = new UserService();
 

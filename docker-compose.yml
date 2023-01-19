@@ -14,7 +14,7 @@ services:
     depends_on:
       - postgres
     env_file:
-     - ./api/.env
+     - "api/.env"
     command: sh -c "cd api && npx prisma migrate dev && npx prisma db seed && yarn dev"
     networks:
       - main-network
@@ -28,12 +28,12 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     env_file:
-      - ./api/.env
+      - "api/.env"
     command: sh -c "cd api &&
                     npx prisma migrate deploy &&
                     cd .. &&
                     node dist/api/prisma/seeder/seed.js &&
-                    node dist/api"
+                    yarn --cwd api start"
     ports:
       - ${PORT}:3000
     networks:
@@ -54,7 +54,7 @@ services:
     networks:
       - main-network
     env_file:
-     - ./api/.env
+     - ".env"
 
 volumes:
   db:

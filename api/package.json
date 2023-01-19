@@ -10,8 +10,9 @@
   "scripts": {
     "build": "yarn clean && tsc --build",
     "clean": "rm -rf ../build",
-    "start": "nodemon index.ts",
-    "dev": "yarn start"
+    "start": "node ../dist/api",
+    "watch": "nodemon index.ts",
+    "dev": "yarn watch"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^6.6.1",
