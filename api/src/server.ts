@@ -9,8 +9,6 @@ import { typeDefs as scalarsTypeDefs, resolvers as scalarsResolvers } from 'grap
 
 export const serveGraphql = async (app: Express) => {
 
-  const prisma = new PrismaClient()
-
   const typeDefs = [
     ...await loadFiles('./src/**/*.graphql'),
     scalarsTypeDefs
@@ -22,7 +20,7 @@ export const serveGraphql = async (app: Express) => {
 
   const server = new ApolloServer({
     context: ({ req, res }: {req: Request , res: Response}) => ({
-      prisma: prisma,
+      prisma: new PrismaClient(),
       build: buildContext({req, res})
     }),
     typeDefs,
