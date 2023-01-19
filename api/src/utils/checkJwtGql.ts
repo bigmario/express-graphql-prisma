@@ -2,10 +2,11 @@ import {unauthorized} from '@hapi/boom';
 import { ResolverContext } from '../core/types/core.types';
 
 export async function checkJWTGql(context: ResolverContext) {
-  const { user } = await context.build.authenticate('jwt', {session: false})
+  const jwtAuth = await context.build?.authenticate('jwt', {session: false})
 
-  if (!user) {
+  if (!jwtAuth?.user) {
     throw unauthorized('invalid credentials')
+  } else {
+    return jwtAuth.user;
   }
-  return user;
 }

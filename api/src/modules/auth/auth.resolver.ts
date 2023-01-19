@@ -12,9 +12,9 @@ export async function login(
   context: ResolverContext
 ): Promise<any> {
   const { email, password } = args;
-  const { user } = await context.build.authenticate('graphql-local', {email , password});
+  const gqlLocalAuth = await context.build?.authenticate('graphql-local', {email , password});
 
-  return service.signToken(user)
+  return service.signToken(gqlLocalAuth?.user)
 }
 
 export async function sendRecovery(
