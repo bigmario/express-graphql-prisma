@@ -1,10 +1,11 @@
 version: '3.3'
 
 services:
-  graphql:
+  graphql-dev:
     build:
       dockerfile: Dockerfile
       context: .
+      target: development
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -13,10 +14,32 @@ services:
     depends_on:
       - postgres
     env_file:
-     - .env
+     - ./api/.env
     command: sh -c "cd api && npx prisma migrate dev && npx prisma db seed && yarn dev"
     networks:
       - main-network
+
+  graphql-prod:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: production
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./api/.env
+    command: sh -c "cd api &&
+                    npx prisma migrate deploy &&
+                    cd .. &&
+                    node dist/api/prisma/seeder/seed.js &&
+                    node dist/api"
+    ports:
+      - ${PORT}:3000
+    networks:
+      - main-network
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:13
@@ -31,7 +54,7 @@ services:
     networks:
       - main-network
     env_file:
-     - .env
+     - ./api/.env
 
 volumes:
   db:
