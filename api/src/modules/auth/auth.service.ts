@@ -1,4 +1,3 @@
-import {unauthorized} from '@hapi/boom';
 import { hash, compare } from 'bcrypt';
 import { Secret, sign, verify } from 'jsonwebtoken';
 import { createTransport } from 'nodemailer';
@@ -7,7 +6,9 @@ import {config} from '../../core/config';
 import { UpdateUSerDto } from '../users/dto/updateUser.dto';
 import { ResolverContext } from '../../core/types/core.types';
 import { UserService } from '../users/users.service';
-import { ChangePasswordType, LoginType, MailType, RecoveryType } from './types/auth.types';
+import { ChangePasswordType, LoginType, MailType } from './types/auth.types';
+import { AuthenticationError } from 'apollo-server-express';
+
 const service = new UserService();
 
 export class AuthService {
@@ -16,13 +17,13 @@ export class AuthService {
   async getUser(parent: unknown, args: LoginType, context: ResolverContext) {
     const user = await service.findByEmail(parent, args, context);
     if (!user) {
-      throw unauthorized();
+      throw new AuthenticationError ('invalid credentials');
     }
 
     const isMatch = await compare(args.password, user.session?.password as string);
 
     if (!isMatch) {
-      throw unauthorized();;
+      throw new AuthenticationError ('invalid credentials');
     }
 
     return user;
@@ -43,7 +44,7 @@ export class AuthService {
   async sendRecovery(parent: unknown, args: UpdateUSerDto, context: ResolverContext) {
     const user = await service.findByEmail(parent, args, context);
     if (!user) {
-      throw unauthorized();
+      throw new AuthenticationError ('invalid credentials');
     }
     const payload = { sub: user.id };
     const token = sign(payload, config.jwtSecret as Secret, {expiresIn: '15min'});
@@ -77,7 +78,7 @@ export class AuthService {
       );
 
       if (user.session.recoveryToken !== args.token) {
-        throw unauthorized();
+        throw new AuthenticationError ('invalid credentials');
       }
       const hashpass = await hash(args.newPassword, 10);
 
@@ -93,7 +94,7 @@ export class AuthService {
         context);
       return 'Password changed';
     } catch (error) {
-      throw unauthorized();
+      throw new AuthenticationError ('invalid credentials');
     }
   }
 
