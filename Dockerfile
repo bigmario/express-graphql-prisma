@@ -1,6 +1,7 @@
 # Dockerfile
 FROM node:18-alpine as development
-
+ARG NODE_ENV="development"
+ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
@@ -13,7 +14,7 @@ RUN  yarn --cwd api build
 USER node
 
 FROM node:18-alpine as production
-ARG NODE_ENV=production
+ARG NODE_ENV="production"
 ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 COPY --chown=node:node package*.json ./
