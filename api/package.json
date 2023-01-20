@@ -8,12 +8,13 @@
     "seed": "ts-node ./prisma/seeder/seed.ts"
   },
   "scripts": {
-    "build": "yarn clean && tsc --build",
+    "build": "yarn clean && tsc --build && yarn copyfiles",
     "clean": "rm -rf ../build",
     "start": "node ../dist/api",
+    "copyfiles": "cp -R src/modules/auth/schema.graphql ../dist/api/src/modules/auth/ && cp -R src/modules/users/schema.graphql ../dist/api/src/modules/users/",
     "watch": "nodemon index.ts",
-    "dev": "npx prisma migrate dev && npx prisma db seed && yarn watch",
-    "prod": "npx prisma migrate deploy && node ../dist/api/prisma/seeder/seed.js && yarn start"
+    "dev": "yarn build && npx prisma migrate dev && npx prisma db seed && yarn watch",
+    "prod": "yarn build && npx prisma migrate deploy && node ../dist/api/prisma/seeder/seed.js && yarn start"
   },
   "dependencies": {
     "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.0",

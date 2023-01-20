@@ -5,14 +5,15 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-      target: development
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - ${DEV_PORT}:3000
+      - ${PORT}:3000
     depends_on:
       - postgres
+    environment:
+      NODE_ENV: development
     env_file:
      - .env
     command: sh -c "yarn --cwd api dev"
@@ -23,15 +24,16 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-      target: production
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: production
     env_file:
       - .env
     command: sh -c "yarn --cwd api prod"
     ports:
-      - ${PROD_PORT}:3000
+      - ${PORT}:3000
     networks:
       - main-network
     depends_on:
