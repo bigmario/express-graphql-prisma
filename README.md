@@ -14,13 +14,14 @@ $ yarn --cwd api watch
 ```
 ## Run with Docker
 ```bash
+# Build All images
 $ docker-compose build
 
 # Run in development mode
-$ docker-compose up -q graphql-dev
+$ docker-compose up -d graphql-dev
 
 # Run in production mode (WIP)
-$ docker-compose up -q graphql-prod
+$ docker-compose up -d graphql-prod
 ```
 
 ## Access Apollo Server
