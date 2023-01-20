@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 import type { Express } from 'express'
 import { resolvers } from './resolvers/resolvers'
 import { loadFiles } from '@graphql-tools/load-files'
@@ -23,10 +24,17 @@ export const serveGraphql = async (app: Express) => {
   const server = new ApolloServer({
     context: ({ req, res }: {req: Request , res: Response}) => ({
       prisma: prismaClient,
-      build: buildContext({req, res})
+      build: buildContext({req, res}),
     }),
+    persistedQueries: false,
+    cache: 'bounded',
     typeDefs,
-    resolvers: allResolvers
+    resolvers: allResolvers,
+    csrfPrevention: true,
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
+    introspection: true
   });
 
   await server.start();
