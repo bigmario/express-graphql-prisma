@@ -1,5 +1,4 @@
 import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 import type { Express } from 'express'
 import { resolvers } from './resolvers/resolvers'
 import { loadFiles } from '@graphql-tools/load-files'
@@ -31,9 +30,6 @@ export const serveGraphql = async (app: Express) => {
     typeDefs,
     resolvers: allResolvers,
     csrfPrevention: true,
-    plugins: [
-      ApolloServerPluginLandingPageGraphQLPlayground(),
-    ],
     introspection: true
   });
 
