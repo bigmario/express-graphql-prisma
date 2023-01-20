@@ -8,13 +8,19 @@ $ yarn
 ```
 
 ```bash
-#Run Project
-$ yarn --cwd api dev
+# Run Project
+# Must have a running PostgreSQL Database
+$ yarn --cwd api watch
 ```
 ## Run with Docker
 ```bash
 $ docker-compose build
-$ docker-compose up -d
+
+# Run in development mode
+$ docker-compose up -q graphql-dev
+
+# Run in production mode (WIP)
+$ docker-compose up -q graphql-prod
 ```
 
 ## Access Apollo Server
