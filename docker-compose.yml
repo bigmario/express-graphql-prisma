@@ -9,7 +9,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - ${PORT}:3000
+      - ${DEV_PORT}:3000
     depends_on:
       - postgres
     environment:
@@ -33,7 +33,7 @@ services:
       - .env
     command: sh -c "yarn --cwd api prod"
     ports:
-      - ${PORT}:3000
+      - ${PROD_PORT}:3000
     networks:
       - main-network
     depends_on:

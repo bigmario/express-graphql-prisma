@@ -8,3 +8,5 @@ COPY --chown=node:node api/prisma/ ./api/prisma/
 RUN  yarn
 COPY --chown=node:node . .
 RUN  yarn --cwd api build
+
+EXPOSE 3000

@@ -15,7 +15,7 @@ export const createApp = async() => {
   passport.use(JwtStrategy);
   passport.use(GQLLocalStrategy)
 
-  app.use('/images', express.static(path.join(__dirname, '/src/modules/users/public')));
+  app.use('/images', express.static(path.join(__dirname, '/public')));
 
   await serveGraphql(app);
   return app

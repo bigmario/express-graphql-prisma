@@ -29,8 +29,8 @@ export const serveGraphql = async (app: Express) => {
     cache: 'bounded',
     typeDefs,
     resolvers: allResolvers,
-    csrfPrevention: true,
-    introspection: true
+    //csrfPrevention: true,
+    //introspection: true
   });
 
   await server.start();
