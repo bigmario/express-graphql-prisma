@@ -20,7 +20,7 @@ $ docker-compose build
 # Run in development mode
 $ docker-compose up -d graphql-dev
 
-# Run in production mode (Work In Progress)
+# Run in production mode
 $ docker-compose up -d graphql-prod
 ```
 
