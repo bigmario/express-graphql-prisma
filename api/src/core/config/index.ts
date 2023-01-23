@@ -7,7 +7,7 @@ export const config = {
   isProd: process.env.NODE_ENV === 'production',
   isDev: process.env.NODE_ENV === 'development',
   devPort: process.env.DEV_PORT,
-  prodPort: process.env.PORT,
+  prodPort: process.env.PROD_PORT,
   dbUrl: process.env.DATABASE_URL,
   apiKey: process.env.API_KEY,
   jwtSecret: process.env.JWT_SECRET,

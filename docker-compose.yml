@@ -9,16 +9,16 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - ${DEV_PORT}:3000
+      - "${DEV_PORT}:3000"
     depends_on:
       - postgres
     environment:
-      NODE_ENV: development
-    env_file:
-     - .env
-    command: sh -c "yarn --cwd api dev"
+      NODE_ENV: "development"
     networks:
       - main-network
+    env_file:
+     - api/.env
+    command: sh -c "yarn --cwd api dev"
 
   graphql-prod:
     build:
@@ -28,16 +28,16 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      NODE_ENV: production
-    env_file:
-      - .env
-    command: sh -c "yarn --cwd api prod"
+      NODE_ENV: "production"
     ports:
-      - ${PROD_PORT}:3000
+      - "${PROD_PORT}:4000"
     networks:
       - main-network
     depends_on:
       - postgres
+    env_file:
+      - api/.env
+    command: sh -c "yarn --cwd api prod"
 
   postgres:
     image: postgres:13
@@ -46,13 +46,13 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - ${DB_PORT}:5432
+      - "${DB_PORT}:5432"
     volumes:
       - db:/var/lib/postgresql/data
     networks:
       - main-network
     env_file:
-     - .env
+     - api/.env
 
 volumes:
   db:
